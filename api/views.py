@@ -25,9 +25,9 @@ def article_list(request):
         return JsonResponse(serializer.errors,status=400)
 
 @csrf_exempt
-def article_detail(request, pk):
+def article_detail(request,pk):
     try:
-        article=Article.object.get(pk=pk)
+        article=Article.objects.get(pk=pk)
 
     except Article.DoesNotExist:
         return HttpResponse(status=404)
