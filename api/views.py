@@ -13,14 +13,39 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework import mixins
+from rest_framework.authentication import SessionAuthentication,BasicAuthentication,TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets
+from django.shortcuts import get_object_or_404
 # Create your views here.
 # Generic API View
 
+#  The real needful view class XD
+class ArticleViewSet(viewsets.ModelViewSet):
+    serializer_class=ArticleSerializer
+    queryset=Article.objects.all()
+
+
+# Generic Viewset
+
+# Here basically we can read the models as list, as separate object, update individually , add a new one simply by using these two lines of code
+# here we can add the required functionalities.
+
+# class ArticleViewSet(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.CreateModelMixin,mixins.UpdateModelMixin,mixins.RetrieveModelMixin,
+# mixins.DestroyModelMixin):
+#     serializer_class=ArticleSerializer
+#     queryset=Article.objects.all()
+
+
+# Generic API View
 class GenericAPIView(generics.GenericAPIView, mixins.ListModelMixin,mixins.CreateModelMixin,
 mixins.UpdateModelMixin,mixins.RetrieveModelMixin,mixins.DestroyModelMixin):
     serializer_class=ArticleSerializer
     queryset=Article.objects.all()
     lookup_field='id'
+    # authentication_classes=[SessionAuthentication,BasicAuthentication]   #it checks for session authentication classes initially then if its absent then it will check for BasicAuthentication
+    # authentication_classes=[TokenAuthentication]
+    # permission_classes=[IsAuthenticated]
 
     def get(self,request,id=None):
         if id:                     #for getting a specific onject by sendig id
